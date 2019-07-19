@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Juventud Rebelde</title>
+  <!-- materialize icons, css & js -->
+  <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" href="/css/styles.css" rel="stylesheet">
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+  <link rel="manifest" href="/manifest.json">
+  <!-- ios support -->
+  <link rel="apple-touch-icon" href="/img/icons/icon-96x96.png">
+  <meta name="apple-mobile-web-app-status-bar" content="#FFE1C4">
+  <meta name="theme-color" content="#FFE1C4">
+</head>
+<body class="grey lighten-4">
+
+   
+  <!-- top nav -->
+  <nav class="z-depth-0">
+    <div class="nav-wrapper container">
+    
+      <a href="/index.html" onload= "home()"">Juventud<span>Rebelde</span></a>
+
+
+
+      <span class="right white-text text-darken-1">
+        <i id="menu-icon" class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
+      </span>
+    </div>
+  </nav>
+
+    <script>
+    function home(){
+      var m =document.getElementById('menu-icon');
+      m.style.animation="rotate 3s infinite";
+      document.body.style.background='url("/static/img/fondo.png") no-repeat';
+    }
+    </script>
+
+   <!-- side nav -->
+   <ul id="side-menu" class="sidenav side-menu" >
+    <li><a class="subheader">JuventudRebelde</a></li>
+     <li><a href="/index.html" class="waves-effect"><i class="material-icons">home_outline</i>Pagina Principal</a></li>
+     
+     <li><a class="subheader"><i class= "material-icons">format_list_bulleted</i>Secciones</a></li>
+     <li><div class="divider"></div></li>
+    
+     <!--
+     <li><a href="/pages/about.html" class="waves-effect">About</a></li>
+     <li><div class="divider"></div></li>
+     <li><a href="/pages/contact.html" class="waves-effect">
+       <i class="material-icons">mail_outline</i>Contact</a>
+     </li> -->
+   </ul> 
+
+  <!-- news -->
+  <div id="items" class="news container grey-text text-darken-1">
+    <p></p>
+  </div>
+
+  
+  <script src="/js/app.js"></script>
+  <script src="/js/findSecciones.js"></script>
+  <!-- <script src="/js/rss2.js"></script> --> 
+  <script src="/js/ui.js"></script>
+</body>
+</html>
