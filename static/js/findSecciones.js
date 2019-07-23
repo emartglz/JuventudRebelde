@@ -1,4 +1,3 @@
-//const DOMPARSER = new DOMParser().parseFromString.bind(new DOMParser())
 
 fetch('/js/urlSecciones.json').then((res) => {
 	res.text().then((data) => {
@@ -13,18 +12,18 @@ fetch('/js/urlSecciones.json').then((res) => {
 				console.error('URL invalid');
 				return
             }
-
-            //const t = (entry, tname) => entry.getElementsByTagName(tname)[0];
-            //const date = entry => new Date(t(entry, 'updated').textContent).getDate();
-            //const html2txt = html => html.replace(/<(?:.|\n)*?>/gm, '');
-            //const content = entry => html2txt(t(entry, 'content').textContent).slice(0, 200);
                 
             fetch(`/get_url?url=${url}`)
+              .catch(() => {
+              if(evt.request.url.indexOf('.html') > -1){
+                return caches.match('/pages/fallback.html');
+              }
+              })
               .then(response => response.text())
               .then(html => {
               const parser = new DOMParser();
               const htmlDoc = parser.parseFromString(html,"text/html");
-              console.log(htmlDoc);
+              // console.log(htmlDoc);
             
               var divTags= htmlDoc.getElementsByTagName('div')
               var searchText= "CANALES RSS DE JUVENTUD REBELDE"
@@ -41,7 +40,7 @@ fetch('/js/urlSecciones.json').then((res) => {
                       }
                   }
                  var lists=found.getElementsByTagName("li");
-                 console.log(lists);
+                //  console.log(lists);
                 
                  var menu= document.getElementById("side-menu");  
                  for(var i=0; i<lists.length;i++){
@@ -49,9 +48,6 @@ fetch('/js/urlSecciones.json').then((res) => {
                     var h4= sublist.getElementsByTagName('h4')[0];
                     var Section= h4.innerText;                    
                    
-                   // <li><a href="#" class="waves-effect" class="secciones">
-                   // <i class= "material-icons">import_contacts</i>Noticias</a></li>
-
                     var header= document.createElement('li')
                     var n1= document.createElement('a')
                     
@@ -95,16 +91,16 @@ fetch('/js/urlSecciones.json').then((res) => {
                        const element = aList[index]
                     
                        var string= element.getElementsByTagName('p')[0].innerText;
-                      if(string.length>25){
+                       if(string == 'Generales')
+                        string = 'Todo'
+                       if(string.length>25){
                        string= string.substring(0,20);
                        string+="...";}
                        var liNew= document.createElement('li');
 
                        var aLi = document.createElement('a');
                        aLi.className="waves-effect";
-                       //este cacho no estaba antes
                        
-                       //hast aqui llega el cacho
                        aLi.href= "#";
                        aLi.onclick= function(){
                         
@@ -130,22 +126,28 @@ fetch('/js/urlSecciones.json').then((res) => {
                                
                                <div class="timestamp">${date(entry)}</div>
                                <a href="${t(entry, 'link').getAttribute('href')}">
-                                 <div class="entry-title">${t(entry, 'title').innerHTML.replace(/<!\[CDATA\[(.*)\]\]>/g, "$1")}</div>
+                               <div class="entry-title">${t(entry, 'title').innerHTML.replace(/<!\[CDATA\[(.*)\]\]>/g, "$1")}</div>
                                </a>
                                <div class="content">${content(entry)}&hellip;</div>
                              </div>`);
              
              
-                           console.log(document.getElementById('items'))
+                          //  console.log(document.getElementById('items'))
                            document.getElementById('items').innerHTML = html.join('');
                            
-                           var m =document.getElementById('menu-icon');
-                           m.style.animation="fixed";
+                           //movment
+                          //  var m =document.getElementById('menu-icon');
+                          //  m.style.animation="fixed";
                            document.body.style.background='url("/static/img/fondo.png") no-repeat';
                            document.body.style.backgroundSize= 'cover';
                            document.body.style.backgroundPosition='center,top';
                            document.body.style.backgroundAttachment='fixed';
                          })
+                         .catch(() => {
+                          if(evt.request.url.indexOf('.html') > -1){
+                            return caches.match('/pages/fallback.html');
+                          }
+                         });
                         
                        }
                        
@@ -210,20 +212,14 @@ fetch('/js/urlSecciones.json').then((res) => {
                     header.appendChild(ul);
                      
                     menu.appendChild(header);
-
-                   
+      
                     var separador= document.createElement('li');
                     var separador1= document.createElement('div');
                     separador1.className= "divider";
                     separador.appendChild(separador1);
                     menu.appendChild(separador);
-
-
                  }
-
-            
             })
-
         })
     })
 })

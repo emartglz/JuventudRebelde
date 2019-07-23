@@ -1,9 +1,9 @@
 {
   "name": "Juventud Rebelde",
-  "short_name": "JuventudRebelde",
+  "short_name": "JR",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#394BE9",
+  "background_color": "#0081cd",
   "theme_color": "#ffffff",
   "orientation": "portrait-primary",
   "icons": [

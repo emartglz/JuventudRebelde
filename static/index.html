@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,8 @@
   <link rel="manifest" href="/manifest.json">
   <!-- ios support -->
   <link rel="apple-touch-icon" href="/img/icons/icon-96x96.png">
-  <meta name="apple-mobile-web-app-status-bar" content="#FFE1C4">
-  <meta name="theme-color" content="#FFE1C4">
+  <meta name="apple-mobile-web-app-status-bar" content="#0081cd">
+  <meta name="theme-color" content="#0081cd">
 </head>
 <body class="grey lighten-4">
 
@@ -22,7 +22,7 @@
   <nav class="z-depth-0">
     <div class="nav-wrapper container">
     
-      <a href="/index.html" onload= "home()"">Juventud<span>Rebelde</span></a>
+      <a href="/index.html" onload= "home()"">Juventud <span>Rebelde</span></a>
 
 
 
@@ -42,8 +42,8 @@
 
    <!-- side nav -->
    <ul id="side-menu" class="sidenav side-menu" >
-    <li><a class="subheader">JuventudRebelde</a></li>
-     <li><a href="/index.html" class="waves-effect"><i class="material-icons">home_outline</i>Pagina Principal</a></li>
+    <li><a class="subheader">Juventud Rebelde</a></li>
+     <li><a href="/index.html" class="waves-effect"><i class="material-icons">home_outline</i>Página Principal</a></li>
      
      <li><a class="subheader"><i class= "material-icons">format_list_bulleted</i>Secciones</a></li>
      <li><div class="divider"></div></li>
@@ -63,8 +63,77 @@
 
   
   <script src="/js/app.js"></script>
-  <script src="/js/findSecciones.js"></script>
-  <!-- <script src="/js/rss2.js"></script> --> 
+  <script src="/js/findSecciones.js"></script> 
   <script src="/js/ui.js"></script>
+  <script>     
+      var elem = document.querySelectorAll('.sidenav')[0];
+      var instance = M.Sidenav.getInstance(elem);
+       var url = 'http://www.juventudrebelde.cu/get/rss/grupo/generales';
+       const t = (entry, tname) => entry.getElementsByTagName(tname)[0];
+       const date = entry => new Date(t(entry, 'updated').textContent).toUTCString();
+       const html2txt = html => html.replace(/<(?:.|\n)*?>/gm, '');
+       const content = entry => html2txt(t(entry, 'content').textContent).slice(0, 200);             
+       fetch(`/get_url?url=${url}`)
+         .then(response => response.text())
+         .then(xml => {
+         const parser = new DOMParser();
+         const xmlDoc = parser.parseFromString(xml,"text/xml");
+         const html = Array.from(xmlDoc.getElementsByTagName('entry')).map(entry => `
+           <div class="entry card-panel recipes white row">
+             <div class="timestamp">${date(entry)}</div>
+             <a href="${t(entry, 'link').getAttribute('href')}">
+               <div class="entry-title">${t(entry, 'title').innerHTML.replace(/<!\[CDATA\[(.*)\]\]>/g, "$1")}</div>
+             </a>
+             <div class="content">${content(entry)}&hellip;</div>
+           </div>`);
+        //  console.log(document.getElementById('items'))
+         document.getElementById('items').innerHTML = html.join('');
+         
+         document.body.style.background='url("/static/img/fondo.png") no-repeat';
+         document.body.style.backgroundSize= 'cover';
+         document.body.style.backgroundPosition='center,top';
+         document.body.style.backgroundAttachment='fixed';
+       })
+       .catch(() => {
+        if(evt.request.url.indexOf('.html') > -1){
+          return caches.match('/pages/fallback.html');
+        }
+       });
+  </script>
+  <script>
+    // Google Analytics
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-291893-2']);
+    _gaq.push(['_trackPageview']);
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+    // Piwik
+    var _paq = _paq || [];
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["setCookieDomain", "*.www.juventudrebelde.cu"]);
+    _paq.push(["setDomains", ["*.www.juventudrebelde.cu"]]);
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+
+    (function () {
+        var u = (("https:" == document.location.protocol) ? "https" : "http")
+                + "://piwikstats.cip.cu/";
+        _paq.push(["setTrackerUrl", u + "piwik.php"]);
+        _paq.push(["setSiteId", "102"]);
+        var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
+        g.type = "text/javascript";
+        g.defer = true;
+        g.async = true;
+        g.src = u + "piwik.js";
+        s.parentNode.insertBefore(g, s);
+    })();
+</script>
 </body>
 </html>
